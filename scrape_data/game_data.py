@@ -27,6 +27,8 @@ with sync_playwright() as p:
             # ADDED: wait for table to load before parsing
             html = page.content()
             soup = BeautifulSoup(html, 'html.parser')
+
+
             
 
             date = soup.find("div", class_="mLASH Kiog YXOwE bmjsw").get_text()
