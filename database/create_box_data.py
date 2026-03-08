@@ -5,19 +5,18 @@ from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.orm import Session, declarative_base
 from datetime import datetime
 
-base_url = "postgresql://postgres:Drosser101@localhost:5432/wizards_games"
+base_url = "postgresql://postgres:Drosser101@localhost:5432/wizards"
 engine = create_engine(base_url)
 
 
 
 Base = declarative_base()
 class GameData(Base):
-    __tablename__ = 'game_data'
+    __tablename__ = 'wizards_box_data'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     game_id = Column(Integer)
     name = Column(String(100))
-    jersey = Column(String(10))
     minutes = Column(Integer)
     points = Column(Integer)
     field_goal_percentage = Column(String(20))
@@ -36,7 +35,7 @@ class GameData(Base):
     home_or_away = Column(String(10))
 
 
-    # Recreate table in the 'wizards_games' database (drops existing table)
+# Recreate table in the 'wizards' database (drops existing table)
 Base.metadata.drop_all(engine)
 Base.metadata.create_all(engine)
 
@@ -54,7 +53,6 @@ with Session(engine) as session:
             row = GameData(
                 game_id = game_count,
                 name=data[f"game_{game_count}"]["home_team"][player]["player"],
-                jersey=data[f"game_{game_count}"]["home_team"][player]["jersey"],
                 minutes=data[f"game_{game_count}"]["home_team"][player]["minutes"],
                 points=data[f"game_{game_count}"]["home_team"][player]["points"],
                 field_goal_percentage=data[f"game_{game_count}"]["home_team"][player]["field_goal_percentage"],
@@ -77,7 +75,6 @@ with Session(engine) as session:
             row = GameData(
                 game_id = game_count,
                 name=data[f"game_{game_count}"]["away_team"][player]["player"],
-                jersey=data[f"game_{game_count}"]["away_team"][player]["jersey"],
                 minutes=data[f"game_{game_count}"]["away_team"][player]["minutes"],
                 points=data[f"game_{game_count}"]["away_team"][player]["points"],
                 field_goal_percentage=data[f"game_{game_count}"]["away_team"][player]["field_goal_percentage"],

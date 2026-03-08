@@ -5,7 +5,7 @@ from datetime import datetime
 
 # 1. Connect to the default 'postgres' DB to create the new one
 base_url = "postgresql://postgres:Drosser101@localhost:5432/"
-new_db_name = "wizards_games"
+new_db_name = "wizards"
 engine = create_engine(base_url + "postgres")
 
 # 2. Use sqlalchemy-utils to create the database if it doesn't exist

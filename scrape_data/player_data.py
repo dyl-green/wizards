@@ -210,5 +210,5 @@ with sync_playwright() as p:
     browser.close()  # close once at the end
 
 # ADDED: write final_data to JSON file after processing all URLs
-with open('/home/dyl/Documents/Wizards/data/wizards_data.json', 'w', encoding='utf-8') as f:
+with open('/home/dyl/Documents/Wizards/data/wizards_box_data.json', 'w', encoding='utf-8') as f:
     json.dump(final_data, f, indent=4)
