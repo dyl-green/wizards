@@ -17,6 +17,7 @@ class GameData(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     game_id = Column(Integer)
     name = Column(String(100))
+    team = Column(String(50))
     minutes = Column(Integer)
     points = Column(Integer)
     field_goal_percentage = Column(String(20))
@@ -53,6 +54,7 @@ with Session(engine) as session:
             row = GameData(
                 game_id = game_count,
                 name=data[f"game_{game_count}"]["home_team"][player]["player"],
+                team=data[f"game_{game_count}"]["home_team"][player]["team"],
                 minutes=data[f"game_{game_count}"]["home_team"][player]["minutes"],
                 points=data[f"game_{game_count}"]["home_team"][player]["points"],
                 field_goal_percentage=data[f"game_{game_count}"]["home_team"][player]["field_goal_percentage"],
@@ -75,6 +77,7 @@ with Session(engine) as session:
             row = GameData(
                 game_id = game_count,
                 name=data[f"game_{game_count}"]["away_team"][player]["player"],
+                team=data[f"game_{game_count}"]["away_team"][player]["team"],
                 minutes=data[f"game_{game_count}"]["away_team"][player]["minutes"],
                 points=data[f"game_{game_count}"]["away_team"][player]["points"],
                 field_goal_percentage=data[f"game_{game_count}"]["away_team"][player]["field_goal_percentage"],
