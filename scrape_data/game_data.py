@@ -1,7 +1,7 @@
 from scrape_all_links import played_urls
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
-
+import json
 
 final_data = {}
 game_count = 0
@@ -25,11 +25,16 @@ with sync_playwright() as p:
             print(f"Processing {url}...")
 
             # ADDED: wait for table to load before parsing
-            page.wait_for_timeout(1000)  # Wait 1 second for page to load
             html = page.content()
             soup = BeautifulSoup(html, 'html.parser')
 
+            
+
             date = soup.find("div", class_="mLASH Kiog YXOwE bmjsw").get_text()
+            time = date[0:7]
+            date = date[8:]
+
+            print(f"{date} {time}")
             attendence = soup.find_all("div", class_="mLASH Kiog YXOwE bmjsw")[2].get_text().strip("Attendance: ")
             location = soup.find("div", class_="aCYDt nRFhJ mLASH VZTD UeCOM nkdHX LbeBv").get_text()
             refs = soup.find_all("div", class_="mLASH Kiog YXOwE bmjsw")[4]
@@ -41,16 +46,16 @@ with sync_playwright() as p:
                 refs_list.append(ref.get_text())
                         
             final_data[f"game_{game_count}"]["game_date"] = date
+            final_data[f"game_{game_count}"]["game_time"] = time
             final_data[f"game_{game_count}"]["game_location"] = location
             final_data[f"game_{game_count}"]["game_attandence"] = attendence
-            final_data[f"game_{game_count}"]["game_refs"] = set(refs_list)  # store refs as a set to avoid duplicates
+            final_data[f"game_{game_count}"]["game_refs"] = refs_list 
 
-
+            
             print(f"Finished processing {url}.")
 
             # ADDED: close page after processing each URL to free up resources, but keep browser open for next URL
             page.close()
-            break
 
         except Exception as e:
             # ADDED: catch and log any exceptions that occur during processing of each URL, but continue with next URL
@@ -58,4 +63,6 @@ with sync_playwright() as p:
             page.close()
 
     browser.close()  # close once at the end
-print(final_data)
+
+with open('/home/dyl/Documents/Wizards/data/wizards_game_data.json', 'w', encoding='utf-8') as f:
+    json.dump(final_data, f, indent=4)
