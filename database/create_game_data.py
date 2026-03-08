@@ -14,7 +14,7 @@ Base = declarative_base()
 class Data(Base):
     __tablename__ = 'wizards_game_data'
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    game_id = Column(Integer, primary_key=True, autoincrement=True)
     game_date = Column(String(20))
     game_time = Column(String(20))
     game_location = Column(String(100))
