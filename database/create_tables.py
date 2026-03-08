@@ -101,28 +101,3 @@ with Session(engine) as session:
         game_count += 1
     session.commit()
     print(f"Inserted {len(data)} rows successfully.")
-# # Insert rows
-# with Session(engine) as session:
-#     for player in data:
-#         row = GameData(
-#             name=player['name'],
-#             jersey=player['jersey'],
-#             minutes=player['minutes'],
-#             points=player['points'],
-#             field_goal_percentage=player['field_goal_percentage'],
-#             three_point_percentage=player['three_point_percentage'],
-#             free_throw_percentage=player['free_throw_percentage'],
-#             rebounds=player['rebounds'],
-#             assists=player['assists'],
-#             turnovers=player['turnovers'],
-#             steals=player['steals'],
-#             blocks=player['blocks'],
-#             o_rebounds=player['o_rebounds'],
-#             d_rebounds=player['d_rebounds'],
-#             fouls=player['fouls'],
-#             plus_minus=player['plus_minus'],
-#             Starter=player['Starter']
-#         )
-#         session.add(row)
-#     session.commit()
-#     print(f"Inserted {len(data)} rows successfully.")
