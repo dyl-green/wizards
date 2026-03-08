@@ -25,17 +25,26 @@ with sync_playwright() as p:
             print(f"Processing {url}...")
 
             # ADDED: wait for table to load before parsing
-            page.wait_for_selector("tbody.Table__TBODY", timeout=10000) 
+            page.wait_for_timeout(1000)  # Wait 1 second for page to load
             html = page.content()
             soup = BeautifulSoup(html, 'html.parser')
 
             date = soup.find("div", class_="mLASH Kiog YXOwE bmjsw").get_text()
+            attendence = soup.find_all("div", class_="mLASH Kiog YXOwE bmjsw")[2].get_text().strip("Attendance: ")
             location = soup.find("div", class_="aCYDt nRFhJ mLASH VZTD UeCOM nkdHX LbeBv").get_text()
-            attandence = soup.find("div", class_="mLASH Kiog YXOwE bmjsw").get_text()
+            refs = soup.find_all("div", class_="mLASH Kiog YXOwE bmjsw")[4]
+            refs = refs.find_all("span", class_="LiUVm")
 
+            refs_list = []
+
+            for ref in refs:
+                refs_list.append(ref.get_text())
+                        
             final_data[f"game_{game_count}"]["game_date"] = date
             final_data[f"game_{game_count}"]["game_location"] = location
-            final_data[f"game_{game_count}"]["game_attandence"] = attandence
+            final_data[f"game_{game_count}"]["game_attandence"] = attendence
+            final_data[f"game_{game_count}"]["game_refs"] = set(refs_list)  # store refs as a set to avoid duplicates
+
 
             print(f"Finished processing {url}.")
 
