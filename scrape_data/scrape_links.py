@@ -3,6 +3,7 @@ from playwright.sync_api import sync_playwright
 from scrape_all_links import played_urls 
 import json
 
+# ADDED: function to format URL, used in main loop
 def format_url(url):
     url = url[0:25] + "boxscore" + url[29:]
     return url
@@ -10,20 +11,11 @@ def format_url(url):
 game_count = 0
 final_data = {}
 
+# ADDED: function to count DNP entries, used in both home and away team functions
 def dnp_count(soup):
     flex = soup.find_all("div", class_="flex")
     dnp = soup.find_all("td", class_="tc td BoxscoreItem__DNP Table__TD")
     return len(dnp)
-
-
-def check(soup):
-    flex = soup.find_all("div", class_="flex")
-    player_name = flex[1].find_all("tr", class_="Table__TR Table__TR--sm Table__even")
-
-    # ADD THIS to debug
-    # for i, row in enumerate(player_name):
-    #     spans = row.find_all("span")
-    #     print(f"  row {i}: {[s.get_text() for s in spans]}")
 
 def awayteam(soup):
     print(f"Processing away team data for {url}...")
@@ -183,28 +175,46 @@ def hometeam(soup):
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)  # launch once, reuse for all games
 
+
+    # ADDED: loop through URLs
     for url in played_urls:
         url = format_url(url)
         game_count += 1
+
+        # ADDED: initialize game data structure at the start of each loop iteration
+        # [game_count] is the key for the current game, which will contain home and away team data
         final_data[f"game_{game_count}"] = {}
 
         try:
+            # ADDED: open new page for each URL, but keep browser open to reuse for next URL
             page = browser.new_page()
             page.goto(url)
+
+            # ADDED: print statement to indicate which URL is being processed, useful for tracking progress and debugging
             print(f"Processing {url}...")
-            page.wait_for_selector("tbody.Table__TBODY", timeout=10000)  # wait for table, not fixed 5s
+
+            # ADDED: wait for table to load before parsing
+            page.wait_for_selector("tbody.Table__TBODY", timeout=10000) 
             html = page.content()
             soup = BeautifulSoup(html, 'html.parser')
 
+            # ADDED: call home and away team functions, store results in final_data under current game key
             final_data[f"game_{game_count}"]["home_team"] = hometeam(soup)
             final_data[f"game_{game_count}"]["away_team"] = awayteam(soup)
+
+
             print(f"Finished processing {url}.")
-            page.close()  # close page, not browser
+
+            # ADDED: close page after processing each URL to free up resources, but keep browser open for next URL
+            page.close()
+
         except Exception as e:
+            # ADDED: catch and log any exceptions that occur during processing of each URL, but continue with next URL
             print(f"Error processing {url}: {e}")
             page.close()
 
     browser.close()  # close once at the end
 
+# ADDED: write final_data to JSON file after processing all URLs
 with open('wizards_data_2026-05-03.json', 'w', encoding='utf-8') as f:
     json.dump(final_data, f, indent=4)
