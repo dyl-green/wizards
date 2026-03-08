@@ -63,7 +63,7 @@ def awayteam(soup):
         }
         players_data.append(player_stats)  # FIX: was players_data = player_stats
 
-    for player in range(7, 17-dnp):
+    for player in range(7, 17):
         data = stats[1].find_all("tr", class_="Table__TR Table__TR--sm Table__even")
         get_name = player_name[player].find_all("span")
         if not get_name:
@@ -143,7 +143,7 @@ def hometeam(soup):
         }
         players_data.append(player_stats)  # FIX: was players_data = player_stats
 
-    for player in range(7, 17-dnp):
+    for player in range(7, 17):
         data = stats[3].find_all("tr", class_="Table__TR Table__TR--sm Table__even")
         get_name = player_name[player].find_all("span")
         if not get_name:
