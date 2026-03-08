@@ -25,7 +25,7 @@ def awayteam(soup):
     stats = soup.find_all("tbody", class_="Table__TBODY")
     players_data = []  # FIX: was {}, must be a list
 
-    name_away_team = soup.find_all("div", class_="Xrilf VZTD kZVXl bmjsw")[1]
+    name_away_team = soup.find_all("div", class_="Xrilf VZTD kZVXl bmjsw")[0]
     name_away_team = name_away_team.find_all("span", class_="NzyJW NMnSM")[0].get_text()
             
 
@@ -107,7 +107,7 @@ def hometeam(soup):
     stats = soup.find_all("tbody", class_="Table__TBODY")
     players_data = []  # FIX: was {}, must be a list
 
-    name_home_team = soup.find_all("div", class_="Xrilf VZTD kZVXl bmjsw")[0]
+    name_home_team = soup.find_all("div", class_="Xrilf VZTD kZVXl bmjsw")[1]
     name_home_team = name_home_team.find_all("span", class_="NzyJW NMnSM")[0].get_text()
 
     for player in range(1, 6):
