@@ -25,6 +25,10 @@ def awayteam(soup):
     stats = soup.find_all("tbody", class_="Table__TBODY")
     players_data = []  # FIX: was {}, must be a list
 
+    name_away_team = soup.find_all("div", class_="Xrilf VZTD kZVXl bmjsw")[1]
+    name_away_team = name_away_team.find_all("span", class_="NzyJW NMnSM")[0].get_text()
+            
+
     for player in range(1, 6):
         data = stats[1].find_all("tr", class_="Table__TR Table__TR--sm Table__even")
         get_name = player_name[player].find_all("span")
@@ -37,8 +41,10 @@ def awayteam(soup):
         if len(data) < 14:               # UPDATED bounds check
             continue
         name = get_name[0].get_text()
+        
         player_stats = { 
             'player': name,
+            'team': name_away_team,
             'minutes': data[0].get_text(),
             'points': data[1].get_text(),
             'field_goal_percentage': data[2].get_text(),
@@ -72,6 +78,7 @@ def awayteam(soup):
 
         player_stats = {
             'player': name,
+            'team': name_away_team,
             'minutes': data[0].get_text(),
             'points': data[1].get_text(),
             'field_goal_percentage': data[2].get_text(),
@@ -100,6 +107,9 @@ def hometeam(soup):
     stats = soup.find_all("tbody", class_="Table__TBODY")
     players_data = []  # FIX: was {}, must be a list
 
+    name_home_team = soup.find_all("div", class_="Xrilf VZTD kZVXl bmjsw")[0]
+    name_home_team = name_home_team.find_all("span", class_="NzyJW NMnSM")[0].get_text()
+
     for player in range(1, 6):
         data = stats[3].find_all("tr", class_="Table__TR Table__TR--sm Table__even")
         get_name = player_name[player].find_all("span")
@@ -114,6 +124,7 @@ def hometeam(soup):
         name = get_name[0].get_text()
         player_stats = { 
             'player': name,
+            'team': name_home_team,
             'minutes': data[0].get_text(),
             'points': data[1].get_text(),
             'field_goal_percentage': data[2].get_text(),
@@ -146,6 +157,7 @@ def hometeam(soup):
         name = get_name[0].get_text()
         player_stats = {
             'player': name,
+            'team': name_home_team,
             'minutes': data[0].get_text(),
             'points': data[1].get_text(),
             'field_goal_percentage': data[2].get_text(),
