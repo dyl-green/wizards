@@ -40,7 +40,7 @@ Base.metadata.drop_all(engine)
 Base.metadata.create_all(engine)
 
 # Load your JSON
-with open('wizards_data_2026-05-03.json', 'r') as f:
+with open('data/wizards_box_data.json', 'r') as f:
     data = json.load(f)
 
 
@@ -48,7 +48,7 @@ with open('wizards_data_2026-05-03.json', 'r') as f:
 with Session(engine) as session:
     game_count = 1
 
-    for i in range(1, len(data)):
+    for i in range(1, len(data)+1):
         for player in range(len(data[f"game_{game_count}"]["home_team"])):
             row = GameData(
                 game_id = game_count,
