@@ -19,8 +19,7 @@ with sync_playwright() as p:
         try:
             # ADDED: open new page for each URL, but keep browser open to reuse for next URL
             page = browser.new_page()
-            page.goto("https://www.espn.com/nba/game/_/gameId/401809939/wizards-bucks")
-
+            page.goto(url)
             # ADDED: print statement to indicate which URL is being processed, useful for tracking progress and debugging
             print(f"Processing {url}...")
 
