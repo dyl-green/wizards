@@ -3,6 +3,8 @@ from playwright.sync_api import sync_playwright
 from scrape_all_links import played_urls 
 import json
 
+played_urls = played_urls[:-1]  # ADDED: remove last URL which is for an upcoming game and doesn't have box score data, prevents errors in processing loop
+
 # ADDED: function to format URL, used in main loop
 def format_url(url):
     url = url[0:25] + "boxscore" + url[29:]
@@ -183,8 +185,8 @@ with sync_playwright() as p:
 
 
     # ADDED: loop through URLs
-    for url in played_urls:
-        url = format_url(url)
+    for url in range(len(played_urls)+1):
+        url = format_url(played_urls[url])
         game_count += 1
 
         # ADDED: initialize game data structure at the start of each loop iteration
