@@ -2,12 +2,6 @@
 Wizards Scout — Flask Backend
 ------------------------------
 Reads from PostgreSQL using environment variables:
-
-  DB_HOST      (default: localhost)
-  DB_PORT      (default: 5432)
-  DB_NAME      (wizards)
-  DB_USER      (postgres)
-  DB_PASSWORD  (Drosser101)
   
 Run:
   pip install flask psycopg2-binary flask-cors
